@@ -99,3 +99,93 @@ Tuy nhiên, giao dịch vẫn có thể **nhìn thấy bản ghi mới** nếu t
 
 🎉 **Bạn đã nắm rõ về các mức độ cô lập giao dịch!** Sẵn sàng luyện tập?
 
+---
+
+## **Mức độ cô lập giao dịch trong PostgreSQL**
+
+PostgreSQL hỗ trợ đầy đủ các mức độ cô lập giao dịch tiêu chuẩn theo chuẩn SQL, bao gồm:
+
+* **Read Uncommitted**
+* **Read Committed** (mặc định)
+* **Repeatable Read**
+* **Serializable**
+
+---
+
+### 1. **Read Uncommitted** trong PostgreSQL
+
+* Mặc dù PostgreSQL hỗ trợ mức này về mặt cú pháp, nhưng thực chất nó được xử lý tương tự **Read Committed**.
+* PostgreSQL không cho phép đọc dữ liệu chưa được commit (không xảy ra **dirty read**).
+* Nếu bạn đặt mức này, nó tự động hạ xuống Read Committed.
+
+---
+
+### 2. **Read Committed** (Mặc định)
+
+* Mỗi câu truy vấn trong giao dịch sẽ nhìn thấy dữ liệu đã được commit **tại thời điểm câu truy vấn đó bắt đầu**.
+* Nếu thực hiện nhiều truy vấn trong một giao dịch, mỗi truy vấn có thể thấy dữ liệu khác nhau nếu có các giao dịch khác commit dữ liệu mới giữa thời điểm đó.
+* Tránh được **dirty read** nhưng có thể xảy ra **non-repeatable read** và **phantom read**.
+
+**Cách thiết lập:**
+
+```sql
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+```
+
+---
+
+### 3. **Repeatable Read**
+
+* Toàn bộ giao dịch nhìn thấy một snapshot dữ liệu cố định tại thời điểm bắt đầu giao dịch.
+* Tránh được **dirty read** và **non-repeatable read**.
+* Tuy nhiên, vẫn có thể xảy ra **phantom read** — nghĩa là nếu bạn chạy truy vấn lọc dữ liệu, những bản ghi mới thêm vào sau đó vẫn có thể xuất hiện nếu truy vấn được chạy lại.
+
+**Cách thiết lập:**
+
+```sql
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+```
+
+---
+
+### 4. **Serializable**
+
+* Mức độ cô lập cao nhất, đảm bảo các giao dịch thực thi tuần tự như thể chạy một mình.
+* Tránh tất cả các lỗi: **dirty read**, **non-repeatable read**, **phantom read**.
+* PostgreSQL sử dụng kỹ thuật gọi là **Serializable Snapshot Isolation (SSI)** để phát hiện và ngăn chặn các giao dịch gây xung đột.
+* Nếu xảy ra xung đột, giao dịch sẽ bị **rollback** và bạn cần retry lại.
+
+**Cách thiết lập:**
+
+```sql
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+```
+
+---
+
+## **Cách sử dụng trong thực tế**
+
+Bạn có thể đặt mức độ cô lập cho từng giao dịch cụ thể bằng lệnh:
+
+```sql
+BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+-- các câu lệnh SQL khác
+
+COMMIT;
+```
+
+Hoặc thay đổi mặc định cho phiên làm việc hiện tại:
+
+```sql
+SET SESSION CHARACTERISTICS AS TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+```
+
+---
+
+## **Lưu ý**
+
+* **Read Committed** là mức mặc định, phù hợp cho hầu hết ứng dụng vì cân bằng tốt giữa hiệu năng và độ nhất quán.
+* Khi dùng **Serializable**, bạn cần xử lý tình huống giao dịch bị rollback do xung đột (thường bằng cách retry).
+* Các mức cao hơn sẽ giữ snapshot dữ liệu ổn định, giảm lỗi đồng thời nhưng cũng làm tăng khả năng chờ khóa và giảm throughput.
+
