@@ -6,7 +6,6 @@
 
 ---
 
-### Recipe: Server-side Integration using Edge Side Includes (ESI)
+### Concept: Asynchronous Microservices
 
-- [Varnish](https://github.com/thaihuynh1717/fictional-waffle/tree/master/Varnish)
-
+- [Introduction](https://github.com/thaihuynh1717/fictional-waffle/blob/master/Concept%3A%20Asynchronous%20Microservices/Introduction/README.md)
