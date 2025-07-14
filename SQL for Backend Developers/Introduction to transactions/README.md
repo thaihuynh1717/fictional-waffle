@@ -81,3 +81,42 @@ Ví dụ: Khi có lỗi, hệ thống sẽ phục hồi về trạng thái trư�
 ## **Kết luận**
 
 Giao dịch nhóm nhiều thao tác lại và thực hiện chúng như một đơn vị. Nếu một thao tác thất bại, toàn bộ giao dịch thất bại. Nếu tất cả thành công, giao dịch sẽ được cam kết. Điều này đảm bảo **toàn vẹn và tin cậy** cho cơ sở dữ liệu.
+
+---
+
+## 🔍 **Giải thích chi tiết thuộc tính ACID**
+
+ACID là viết tắt của:
+
+| Tên thuộc tính                        | Giải thích dễ hiểu                                                                                                                   | Ví dụ thực tế                                                                                                                                                           |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🅰️ **Atomicity** *(Tính nguyên tử)*  | Giao dịch là **toàn bộ hoặc không gì cả**. Nếu một phần thất bại, **toàn bộ bị hủy bỏ**.                                             | Bạn chuyển tiền qua ứng dụng ngân hàng. Nếu tiền bị trừ khỏi tài khoản bạn **nhưng không vào tài khoản người nhận**, hệ thống sẽ hoàn tác toàn bộ giao dịch.            |
+| 🅲 **Consistency** *(Tính nhất quán)* | Dữ liệu trước và sau giao dịch phải **luôn đúng** với quy tắc hệ thống. Giao dịch không được khiến dữ liệu bị “hỏng” hoặc sai logic. | Sau khi mua hàng, hệ thống phải đảm bảo bạn bị trừ đúng số tiền và người bán nhận đúng số lượng tiền. Không được có tình trạng mất tiền mà không có giao dịch ghi nhận. |
+| 🅸 **Isolation** *(Tính độc lập)*     | Giao dịch này **không bị ảnh hưởng** bởi giao dịch khác đang chạy song song.                                                         | Nếu bạn và người khác cùng mua một sản phẩm còn đúng 1 cái, chỉ một người nên thành công. Hệ thống phải xử lý sao cho không bị trùng lặp hay mâu thuẫn.                 |
+| 🅳 **Durability** *(Tính bền vững)*   | Khi giao dịch thành công, **mọi thay đổi sẽ được lưu vĩnh viễn**, ngay cả khi mất điện hay hệ thống gặp sự cố.                       | Sau khi bạn chuyển tiền và nhận được thông báo "thành công", dữ liệu đó sẽ còn tồn tại trong hệ thống, không bao giờ mất đi.                                            |
+
+---
+
+## 🔄 **Giải thích kỹ các trạng thái giao dịch**
+
+Dưới đây là các trạng thái quan trọng mà một giao dịch có thể trải qua, cùng ví dụ minh họa:
+
+| Trạng thái                                   | Mô tả chi tiết                                                                                           | Ví dụ                                                                                                  |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| **Active** *(Đang hoạt động)*                | Giao dịch bắt đầu và đang thực hiện các thao tác như thêm, sửa, xóa.                                     | Hệ thống đang xử lý thao tác “trừ tiền” trong ví của bạn.                                              |
+| **Partially Committed** *(Cam kết một phần)* | Một số thao tác đã thành công, nhưng chưa ghi chính thức vào cơ sở dữ liệu.                              | Đã trừ tiền nhưng chưa ghi vào lịch sử giao dịch.                                                      |
+| **Committed** *(Đã cam kết)*                 | Giao dịch **hoàn tất**. Tất cả thay đổi đã ghi **vĩnh viễn** vào hệ thống.                               | Giao dịch chuyển tiền đã hoàn tất. Số tiền đã trừ và ghi vào lịch sử, người nhận cũng đã nhận được.    |
+| **Failed** *(Thất bại)*                      | Một lỗi xảy ra trong quá trình. Có thể do mất kết nối, lỗi logic, hết tiền...                            | Không thể trừ tiền vì số dư không đủ.                                                                  |
+| **Aborted** *(Bị hủy)*                       | Giao dịch bị hủy hoàn toàn, hệ thống phục hồi về trạng thái ban đầu. Không có thay đổi nào được giữ lại. | Giao dịch chuyển tiền bị lỗi, và số dư tài khoản quay lại như cũ. Không có ghi nhận nào trong lịch sử. |
+
+🔁 Một điểm quan trọng là: **giao dịch chỉ được chuyển sang trạng thái "committed" khi tất cả các thao tác đều thành công. Nếu không, nó sẽ chuyển sang "aborted".**
+
+---
+
+## 📌 Tại sao điều này quan trọng?
+
+* **Bảo vệ dữ liệu người dùng**: Không ai muốn tiền biến mất vì một lỗi kỹ thuật.
+* **Tránh xung đột dữ liệu khi nhiều người cùng thao tác**.
+* **Tăng độ tin cậy hệ thống**: Dù mất điện, dữ liệu vẫn an toàn.
+
+---
