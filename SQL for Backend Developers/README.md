@@ -1,4 +1,4 @@
-- [Indexes](./SQL%20for%20Backend%20Developers/Indexes)
+- [Indexes](Indexes)
 - [Explain plan](https://github.com/thaihuynh1717/fictional-waffle/tree/master/SQL%20for%20Backend%20Developers/Explain%20plan)
 - [Consistency constraints](https://github.com/thaihuynh1717/fictional-waffle/tree/master/SQL%20for%20Backend%20Developers/Consistency%20constraints)
 - [Introduction to transactions](https://github.com/thaihuynh1717/fictional-waffle/blob/master/SQL%20for%20Backend%20Developers/Introduction%20to%20transactions)
