@@ -47,4 +47,3 @@ Các bước này có thể thực hiện bất đồng bộ, không cần dữ 
 
 ---
 
-Bạn muốn mình giúp tóm tắt ngắn hơn hoặc giải thích thêm phần nào không?
