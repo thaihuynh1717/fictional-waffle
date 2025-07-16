@@ -5,3 +5,4 @@
 - [Understanding Transactions](https://github.com/thaihuynh1717/fictional-waffle/tree/master/SQL%20for%20Backend%20Developers/Understanding%20Transactions)
 - [Transaction isolation levels](https://github.com/thaihuynh1717/fictional-waffle/tree/master/SQL%20for%20Backend%20Developers/Transaction%20isolation%20levels)
 - [Set operations](Set%20operations)
+- [Row Locks](Row%20Locks)
