@@ -1,11 +1,6 @@
-# Microservices Architecture
+# Fictional Waffle
 
----
+Welcome to the **Fictional Waffle** repository!  
+This project serves as a workspace for development, experimentation, and documentation. Here you'll find wiki-style notes, guides, and resources related to the codebase and its usage.
 
-## Microservices Architecture: Practical Implementation
-
----
-
-### Concept: Asynchronous Microservices
-
-- [Introduction](https://github.com/thaihuynh1717/fictional-waffle/blob/master/Concept%3A%20Asynchronous%20Microservices/Introduction/README.md)
+*This README acts as a central wiki for project notes and documentation.*
